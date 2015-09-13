@@ -5,7 +5,7 @@
             "slots": [
                 {
                   "name": "zip",
-                  "type": "LITERAL"
+                  "type": "NUMBER"
                 }
             ]
         },

@@ -103,37 +103,30 @@ function setZipCodeInSession(intent, session, callback) {
     if (zipSlot) {
         console.log("setZipCodeInSession located zipSlot", zipSlot);
 
-        var zipCodeString = zipSlot.value;
-        var zipCode = converter.wordsToNumber(zipCodeString);
-
-        if (!zipCode) {
-            //conversion failed
-        }
-        else {
-            sessionAttributes = setSessionAttribute(sessionAttributes, "zipCode", zipCode);
-            speechOutput = "Retrieved theater info. ";
-            repromptText = "You can provide me with a zip code by saying zip code 95630";
-            var listing = showtimes(zipCode, { pageLimit: 4 });
-            listing.getTheaters(function (err, theaters) {
-                if (err) {
-                    console.log("setZipCodeInSession exception while getting theaters", err);
-                    speechOutput = "There was an error retrieving theater info.";
-                    repromptText = null;
-                    shouldEndSession = true;
+        var zipCode = zipSlot.value;
+        sessionAttributes = setSessionAttribute(sessionAttributes, "zipCode", zipCode);
+        speechOutput = "Retrieved theater info. ";
+        repromptText = "You can provide me with a zip code by saying zip code 95630";
+        var listing = showtimes(zipCode, { pageLimit: 4 });
+        listing.getTheaters(function (err, theaters) {
+            if (err) {
+                console.log("setZipCodeInSession exception while getting theaters", err);
+                speechOutput = "There was an error retrieving theater info.";
+                repromptText = null;
+                shouldEndSession = true;
+            }
+            else {
+                console.log("setZipCodeInSession retrieved theaters", theaters);
+                sessionAttributes = setSessionAttribute(sessionAttributes, "theaters", theaters);
+                for (var i = 0, j = theaters.length; i < j; i++) {
+                    var theater = theaters[i];
+                    speechOutput += " Found " + theater.name + " at " + theater.address + ".";
                 }
-                else {
-                    console.log("setZipCodeInSession retrieved theaters", theaters);
-                    sessionAttributes = setSessionAttribute(sessionAttributes, "theaters", theaters);
-                    for (var i = 0, j = theaters.length; i < j; i++) {
-                        var theater = theaters[i];
-                        speechOutput += " Found " + theater.name + " at " + theater.address + ".";
-                    }
 
-                    speechOutput += " Please provide a theater by saying theater name Palladio 16 Cinemas.";
-                }
-                callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-            });
-        }
+                speechOutput += " Please provide a theater by saying theater name Palladio 16 Cinemas.";
+            }
+            callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        });
     }
     else {
         console.log("setZipCodeInSession exception: could not locate a zipSlot");
