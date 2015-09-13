@@ -107,7 +107,7 @@ function setZipCodeInSession(intent, session, callback) {
         
         speechOutput = "Retrieved theater info. ";
         repromptText = "You can provide me with a zip code by saying zip code 95630";
-        var listing = showtimes(zipCode, {});
+        var listing = showtimes(zipCode, { pageLimit:4 });
         console.log("setZipCodeInSession init ws call");
         listing.getTheaters(function (err, theaters) {
             console.log("setZipCodeInSession ws call complete");
@@ -118,7 +118,7 @@ function setZipCodeInSession(intent, session, callback) {
                 shouldEndSession = true;
             }
             else {
-                console.log("setZipCodeInSession retrieved theaters", theaters);
+                console.log("setZipCodeInSession retrieved theaters", theaters.length);
                 sessionAttributes = setSessionAttribute(sessionAttributes, "theaters", theaters);
                 for (var i = 0, j = theaters.length; i < j; i++) {
                     var theater = theaters[i];
@@ -129,7 +129,7 @@ function setZipCodeInSession(intent, session, callback) {
             }
             callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         });
-        console.log("after listing.getTheaters", listing);
+        console.log("after listing.getTheaters");
     }
     else {
         console.log("setZipCodeInSession exception: could not locate a zipSlot");
