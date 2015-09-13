@@ -1,0 +1,28 @@
+  {
+        "intents": [
+        {
+            "intent": "SetZipCodeIntent",
+            "slots": [
+                {
+                  "name": "zip",
+                  "type": "LITERAL"
+                }
+            ]
+        },
+        {
+            "intent": "SetTheaterIntent",
+            "slots": [
+                {
+                  "name": "theater",
+                  "type": "LITERAL"
+                }
+            ]
+        },
+        {
+            "intent": "HelpIntent",
+            "slots": [
+                
+            ]
+        }
+    ]
+}

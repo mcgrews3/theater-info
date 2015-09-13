@@ -1,0 +1,5 @@
+HelpIntent help
+
+SetTheaterIntent theater name {Palladio Sixteen Cinemas|theater}
+
+SetZipCodeIntent zip code {nine five six three zero|zip}
