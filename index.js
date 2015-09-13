@@ -1,5 +1,4 @@
 var showtimes = require('showtimes');
-var converter = require('./numberWordConverter');
 
 /**
  * Steps
@@ -101,14 +100,17 @@ function setZipCodeInSession(intent, session, callback) {
     var speechOutput = "";
 
     if (zipSlot) {
-        console.log("setZipCodeInSession located zipSlot", zipSlot);
-
-        var zipCode = zipSlot.value;
+        var zipCode = getFiveDigitZip(zipSlot.value);
         sessionAttributes = setSessionAttribute(sessionAttributes, "zipCode", zipCode);
+        
+        console.log("setZipCodeInSession located zipSlot", zipSlot, zipCode);
+        
         speechOutput = "Retrieved theater info. ";
         repromptText = "You can provide me with a zip code by saying zip code 95630";
-        var listing = showtimes(zipCode, { pageLimit: 4 });
+        var listing = showtimes(zipCode, {});
+        console.log("setZipCodeInSession init ws call");
         listing.getTheaters(function (err, theaters) {
+            console.log("setZipCodeInSession ws call complete");
             if (err) {
                 console.log("setZipCodeInSession exception while getting theaters", err);
                 speechOutput = "There was an error retrieving theater info.";
@@ -127,6 +129,7 @@ function setZipCodeInSession(intent, session, callback) {
             }
             callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         });
+        console.log("after listing.getTheaters", listing);
     }
     else {
         console.log("setZipCodeInSession exception: could not locate a zipSlot");
@@ -134,6 +137,51 @@ function setZipCodeInSession(intent, session, callback) {
         repromptText = "I'm not sure what your zip code is, you can provide me a zip code by saying zip code 95630";
         callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
     }
+}
+
+function getFiveDigitZip(zipString) {
+    var tokens = zipString.split(" ");
+    console.log("getFiveDigitZip", tokens);
+    if (tokens.length === 5) {
+        return parseInt("" + singleDigitWordtoNum(tokens[0]) + singleDigitWordtoNum(tokens[1]) + singleDigitWordtoNum(tokens[2]) +  singleDigitWordtoNum(tokens[3]) +  singleDigitWordtoNum(tokens[4]) ) ;
+    }
+    else {
+        return 0;
+    }
+}
+
+function singleDigitWordtoNum(digit) {
+    var num = 0;
+    switch (digit) {
+        case "one":
+            num = 1;
+            break;
+        case "two":
+            num = 2;
+            break;
+        case "three":
+            num = 3;
+            break;
+        case "four":
+            num = 4;
+            break;
+        case "five":
+            num = 5;
+            break;
+        case "six":
+            num = 6;
+            break;
+        case "seven":
+            num = 7;
+            break;
+        case "eight":
+            num = 8;
+            break;
+        case "nine":
+            num = 9;
+            break;
+    }
+    return num;
 }
 
 function setTheaterInSession(intent, session, callback) {
