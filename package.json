@@ -1,6 +1,6 @@
 {
   "name": "theater-info",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "test project for node capabilities",
   "main": "index.js",
   "author": "jdmcgrew",

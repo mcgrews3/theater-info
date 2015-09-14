@@ -1,2 +1,2 @@
 rm archive.zip
-zip archive.zip index.js package.json node_modules/*
+zip -r archive.zip index.js package.json node_modules/*
