@@ -81,9 +81,9 @@ function getWelcomeResponse(callback) {
 
     var sessionAttributes = {};
     var cardTitle = "Welcome";
-    var speechOutput = "Welcome to Theater Info.";
+    var speechOutput = "Welcome to Theater Info";
 
-    var repromptText = "Please provide a zip code by saying zip code followed by a 5 digit number.";
+    var repromptText = "Please provide a zip code by saying zip code followed by a 5 digit number";
     speechOutput += repromptText;
     var shouldEndSession = false;
 
@@ -105,43 +105,40 @@ function setZipCodeInSession(intent, session, callback) {
         
         console.log("setZipCodeInSession located zipSlot", zipSlot, zipCode);
         
-        speechOutput = "Retrieved theater info. ";
-        repromptText = "You can provide me with a zip code by saying zip code 95630";
+        speechOutput = "Retrieved theater info ";
+        repromptText = "You can provide me with a zip code by saying zip code followed by a 5 digit number";
         var listing = showtimes(zipCode, { pageLimit:4 });
-        console.log("setZipCodeInSession init ws call");
         listing.getTheaters(function (err, theaters) {
-            console.log("setZipCodeInSession ws call complete");
             if (err) {
                 console.log("setZipCodeInSession exception while getting theaters", err);
-                speechOutput = "There was an error retrieving theater info.";
+                speechOutput = "There was an error retrieving theater info";
                 repromptText = null;
                 shouldEndSession = true;
             }
             else {
                 console.log("setZipCodeInSession retrieved theaters", theaters.length);
                 sessionAttributes = setSessionAttribute(sessionAttributes, "theaters", theaters);
-                for (var i = 0, j = theaters.length; i < j; i++) {
+                for (var i = 0, j = 4; i < j; i++) {
                     var theater = theaters[i];
-                    speechOutput += " Found " + theater.name + " at " + theater.address + ".";
+                    speechOutput += " Found " + theater.name + " at " + theater.address;
                 }
 
-                speechOutput += " Please provide a theater by saying theater name Palladio 16 Cinemas.";
+                repromptText = " Please provide a theater by saying theater name and then a theater name";
+                speechOutput += repromptText;
             }
             callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         });
-        console.log("after listing.getTheaters");
     }
     else {
         console.log("setZipCodeInSession exception: could not locate a zipSlot");
         speechOutput = "I'm not sure what your zip code is, please try again";
-        repromptText = "I'm not sure what your zip code is, you can provide me a zip code by saying zip code 95630";
+        repromptText = "I'm not sure what your zip code is, you can provide me a zip code by saying zip code followed by a 5 digit number";
         callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
     }
 }
 
 function getFiveDigitZip(zipString) {
     var tokens = zipString.split(" ");
-    console.log("getFiveDigitZip", tokens);
     if (tokens.length === 5) {
         return parseInt("" + singleDigitWordtoNum(tokens[0]) + singleDigitWordtoNum(tokens[1]) + singleDigitWordtoNum(tokens[2]) +  singleDigitWordtoNum(tokens[3]) +  singleDigitWordtoNum(tokens[4]) ) ;
     }
@@ -219,12 +216,12 @@ function setTheaterInSession(intent, session, callback) {
                 foundMatch = true;
                 selectedTheater = tempTheater;
 
-                speechOutput += "I was able to find " + selectedTheater.movies.length + " playing at " + selectedTheater.name + " today.";
+                speechOutput += "I was able to find " + selectedTheater.movies.length + " playing at " + selectedTheater.name + " today";
 
                 for (var k = 0, l = selectedTheater.movies.length; k < l; k++) {
                     var tempMovie = selectedTheater.movies[k];
                     var tempMovieName = tempMovie.name;
-                    speechOutput += " Movie " + k + " " + tempMovieName + ".";
+                    speechOutput += " Movie " + k + " " + tempMovieName;
                 }
             }
         }

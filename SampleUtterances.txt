@@ -1,4 +1,6 @@
 HelpIntent help
+HelpIntent to start
+HelpIntent to lookup theaters
 
 SetTheaterIntent theater name {Palladio Sixteen Cinemas|theater}
 
