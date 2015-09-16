@@ -3,5 +3,7 @@ HelpIntent to start
 HelpIntent to lookup theaters
 
 SetTheaterIntent theater name {Palladio Sixteen Cinemas|theater}
+SetTheaterIntent repeat movie info
 
 SetZipCodeIntent zip code {nine five six three zero|zip}
+SetZipCodeIntent repeat theater info

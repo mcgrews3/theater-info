@@ -1,5 +1,10 @@
 # Theater Info
 
+## Invoke
+
+1. Alexa ask theater info to start
+1. zip code nine five six three zero
+
 ## Words to Numbers and Numbers to Words info
 
 * https://github.com/Kibo/numbers2words/blob/master/src/numbers2words.js
