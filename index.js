@@ -132,7 +132,7 @@ function setZipCodeInSession(intent, session, callback) {
                     newTheaterList.push(theater);
                     speechOutput += "Found " + theater.name + " at " + theater.address + ". ";
                 }
-                
+
                 sessionAttributes = setSessionAttribute(sessionAttributes, "theaters", newTheaterList);
 
                 repromptText = "Please provide a theater by saying theater name and then the name or I can repeat this information by saying repeat theater info. ";
@@ -140,6 +140,17 @@ function setZipCodeInSession(intent, session, callback) {
             }
             callback(setZipCodeError, sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         });
+    }
+    else if (session.attributes.hasOwnProperty("theaters")) {
+        for (var i = 0, j = session.attributes.theaters.length; i < j; i++) {
+            var theater = session.attributes.theaters[i];
+            speechOutput += "Found " + theater.name + " at " + theater.address + ". ";
+        }
+
+        repromptText = "Please provide a theater by saying theater name and then the name or I can repeat this information by saying repeat theater info. ";
+        speechOutput += repromptText;
+
+        callback(setZipCodeError, sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
     }
     else {
         console.log("setZipCodeInSession exception: could not locate a zipSlot");
@@ -227,7 +238,7 @@ function setTheaterInSession(intent, session, callback) {
     }
     else {
         //good
-        console.log("setTheaterInSession: have a theater, zip code and theaters", session.attributes.zipCode, session.attributes.theaters, theaterSlot.value);
+        console.log("setTheaterInSession: have a theater, zip code and theaters", session.attributes.zipCode, theaterSlot.value, session.attributes.theaters);
         sessionAttributes = {};
         theaters = session.attributes.theaters;
         var selectedTheater = {};
@@ -235,7 +246,7 @@ function setTheaterInSession(intent, session, callback) {
         var foundMatch = false;
         for (var i = 0, j = theaters.length; i < j; i++) {
             var tempTheater = theaters[i];
-            if (tempTheater.name == selectedTheaterName) {
+            if (findStringMatch(tempTheater.name,selectedTheaterName)) {
                 foundMatch = true;
                 selectedTheater = tempTheater;
 
@@ -258,6 +269,17 @@ function setTheaterInSession(intent, session, callback) {
     }
 
     callback(setTheaterInfoError, sessionAttributes, buildSpeechletResponse(intent.name, speechOutput, repromptText, shouldEndSession));
+}
+
+/**
+ * findStringMatch
+ * stringOne - the absolute theater name; eg Palladio Sixteen Cinemas
+ * stringTwo - the spoken theater name; eg palladio sixteen cinemas
+ */
+function findStringMatch(stringOne, stringTwo) {
+    var found = false;
+    
+    return found;
 }
 
 function setSessionAttribute(session, prop, value) {
