@@ -214,8 +214,6 @@ function singleDigitWordtoNum(digit) {
 
 function setTheaterInSession(intent, session, callback) {
     console.log("setTheaterInSession");
-    var theaters;
-    var sessionAttributes = {};
     var theaterSlot = intent.slots.theater;
     var repromptText = null;
     var shouldEndSession = false;
@@ -239,47 +237,73 @@ function setTheaterInSession(intent, session, callback) {
     else {
         //good
         console.log("setTheaterInSession: have a theater, zip code and theaters", session.attributes.zipCode, theaterSlot.value, session.attributes.theaters);
-        sessionAttributes = {};
-        theaters = session.attributes.theaters;
-        var selectedTheater = {};
+
         var selectedTheaterName = theaterSlot.value;
-        var foundMatch = false;
-        for (var i = 0, j = theaters.length; i < j; i++) {
-            var tempTheater = theaters[i];
-            if (findStringMatch(tempTheater.name,selectedTheaterName)) {
-                foundMatch = true;
-                selectedTheater = tempTheater;
+        var selectedTheater = findStringMatch(selectedTheaterName, session.attributes.theaters);
 
-                speechOutput += "I was able to find " + selectedTheater.movies.length + " playing at " + selectedTheater.name + " today. ";
+        if (selectedTheater) {
+            speechOutput += "I was able to find " + selectedTheater.movies.length + " playing at " + selectedTheater.name + " today. ";
 
-                for (var k = 0, l = selectedTheater.movies.length; k < l; k++) {
-                    var tempMovie = selectedTheater.movies[k];
-                    var tempMovieName = tempMovie.name;
-                    speechOutput += "Movie " + k + ", " + tempMovieName + ". ";
-                }
+            for (var k = 0, l = selectedTheater.movies.length; k < l; k++) {
+                var tempMovie = selectedTheater.movies[k];
+                var tempMovieName = tempMovie.name;
+                speechOutput += "Movie " + k + ", " + tempMovieName + ". ";
             }
         }
-		
-        //Did not find a match for selected theater name in theater
-        if (!foundMatch) {
+        else {
             speechOutput = "I was unable to find the details for the theater " + theaterSlot.value + ". Please start over. ";
         }
-
-        shouldEndSession = true;
     }
-
-    callback(setTheaterInfoError, sessionAttributes, buildSpeechletResponse(intent.name, speechOutput, repromptText, shouldEndSession));
+    shouldEndSession = true;
+    callback(setTheaterInfoError, session.attributes, buildSpeechletResponse(intent.name, speechOutput, repromptText, shouldEndSession));
 }
+
 
 /**
  * findStringMatch
- * stringOne - the absolute theater name; eg Palladio Sixteen Cinemas
- * stringTwo - the spoken theater name; eg palladio sixteen cinemas
+ * inputString - the spoken theater name; eg palladio sixteen cinemas
+ * stringList - array of names
+ *
+ * Approach:
+ * 	some terms should match
+ *  the number of terms/words should match
+ *  position of matching terms should be the same
+ *
  */
-function findStringMatch(stringOne, stringTwo) {
-    var found = false;
-    
-    return found;
+function findStringMatch(inputString, list) {
+    inputString = inputString.toLowerCase();
+    var hiScore = 0;
+    var hiScoreMatch = null;
+
+    var inputStringTokens = inputString.split(" ");
+
+    for (var i = 0, j = list.length; i < j; i++) {
+        var score = 0;
+        var testString = list[i].name;
+        testString = testString.toLowerCase();
+        var testStringTokens = testString.split(" ");
+
+        if (testStringTokens.length == inputStringTokens.length) {
+            score++;
+        }
+
+        for (var k = 0, l = inputStringTokens.length; k < l; k++) {
+            if (k < testStringTokens.length) {
+                var tempToken = testStringTokens[k];
+                var targetToken = inputStringTokens[k];
+                if (tempToken == targetToken) {
+                    score++;
+                }
+            }
+        }
+
+        if (score > hiScore) {
+            hiScore = score;
+            hiScoreMatch = list[i];
+        }
+    }
+
+    return hiScoreMatch;
 }
 
 function setSessionAttribute(session, prop, value) {

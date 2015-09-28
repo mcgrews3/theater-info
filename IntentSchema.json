@@ -1,28 +1,28 @@
-  {
-        "intents": [
+{
+  "intents": [
+    {
+      "intent": "SetZipCodeIntent",
+      "slots": [
         {
-            "intent": "SetZipCodeIntent",
-            "slots": [
-                {
-                  "name": "zip",
-                  "type": "NUMBER"
-                }
-            ]
-        },
-        {
-            "intent": "SetTheaterIntent",
-            "slots": [
-                {
-                  "name": "theater",
-                  "type": "LITERAL"
-                }
-            ]
-        },
-        {
-            "intent": "HelpIntent",
-            "slots": [
-                
-            ]
+          "name": "zip",
+          "type": "LITERAL"
         }
-    ]
+      ]
+    },
+    {
+      "intent": "SetTheaterIntent",
+      "slots": [
+        {
+          "name": "theater",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "HelpIntent",
+      "slots": [
+
+      ]
+    }
+  ]
 }

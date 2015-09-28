@@ -6,9 +6,10 @@
   "author": "jdmcgrew",
   "license": "MIT",
   "dependencies": {
-    "showtimes": "^1.7.0"
+    "showtimes": "^1.7.0",
+    "xstring": "0.0.1"
   },
-  "bundledDependencies":[
-    "showtimes" 
+  "bundledDependencies": [
+    "showtimes"
   ]
 }

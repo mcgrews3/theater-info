@@ -4,6 +4,7 @@
 
 1. Alexa ask theater info to start
 1. zip code nine five six three zero
+1. theater name palladio sixteen cinemas
 
 ## Words to Numbers and Numbers to Words info
 
