@@ -16,3 +16,10 @@
 
 * [Developing an Alexa Skill as a Lambda Function](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function)
 * [Alexa Skills Kit Interface Reference](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference)
+
+## AWS Admin Portal
+
+* [Alexa Developer Portal](https://developer.amazon.com/edw/home.html#/)
+* [Amazon Web Services - Lambda](https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions)
+* [AWS CloudWatch](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logStream:group=%2Faws%2Flambda%2FtestTheaterInfo)
+* [AWS Identity & Access Management](https://console.aws.amazon.com/iam/home?region=us-east-1#home)
